@@ -7,19 +7,32 @@ import java.util.Objects;
 @Entity
 public class Recipe {
 
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int recipeId;
 
     private String recipeName;
 
-    @OneToMany(mappedBy = "recipe",orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe",orphanRemoval = true,
+            fetch = FetchType.LAZY)
     List<RecipeIngredient> recipeIngredients;
 
+    @OneToOne(cascade = {CascadeType.PERSIST,
+                         CascadeType.DETACH,
+                         CascadeType.REFRESH,
+                         CascadeType.MERGE},
+                         fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "recipe_instruction_id")
     RecipeInstruction instruction;
 
-    @ManyToOne
-    @JoinColumn(name = "categories_id")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "recipe_category_recipes",
+            joinColumns = @JoinColumn(name = "recipe_id")
+            ,inverseJoinColumns = @JoinColumn(name = "recipe_category_id")
+    )
     List<RecipeCategory> categories;
 
     public Recipe(int recipeId, String recipeName, List<RecipeIngredient> recipeIngredients, RecipeInstruction instruction, List<RecipeCategory> categories) {

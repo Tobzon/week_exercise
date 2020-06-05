@@ -16,7 +16,11 @@ public class RecipeCategory {
 
     private String category;
 
-    @OneToMany(mappedBy = "recipecategory")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "recipe_category_recipes",
+            joinColumns = @JoinColumn(name = "recipe_category_id")
+            ,inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
     List<Recipe> recipes;
 
     public RecipeCategory(int recipeCategoryId, String category, List<Recipe> recipes) {

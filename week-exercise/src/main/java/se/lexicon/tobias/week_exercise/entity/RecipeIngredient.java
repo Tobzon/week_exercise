@@ -23,7 +23,8 @@ public class RecipeIngredient {
     @ManyToOne(cascade = {CascadeType.PERSIST,
                           CascadeType.MERGE,
                           CascadeType.DETACH,
-                          CascadeType.REFRESH}
+                          CascadeType.REFRESH},
+                          fetch = FetchType.LAZY
     )
     private Ingredient ingredient;
 
@@ -31,7 +32,7 @@ public class RecipeIngredient {
 
     private Measurement measurement;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
